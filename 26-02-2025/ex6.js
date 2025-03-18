@@ -1,0 +1,11 @@
+var unknownValue = "123";
+var numericValue = unknownValue.length;
+var stringnum = "456";
+var nm = parseInt(stringnum);
+console.log("parseInt() Result:", nm);
+var numberToString = 1234;
+var convertedString = numberToString.toString();
+console.log("toString() Result:", convertedString);
+var booleanToString = true;
+var convertedBooleanString = booleanToString.toString();
+console.log("boolean to string:", convertedBooleanString);

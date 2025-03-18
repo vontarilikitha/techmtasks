@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+<bean id="lap" class="ex4.onlineshopping">
+<constructor-arg value="Laptop"/>
+<constructor-arg value="999.99"/>
+
+</bean>
+
+<bean id="mouse" class="ex4.onlineshopping">
+<constructor-arg value="mouse"/>
+<constructor-arg value="299.99"/>
+
+</bean>
+<bean id="shoppingcart" class="ex4.ShoppingCart">
+</bean>
+</beans>

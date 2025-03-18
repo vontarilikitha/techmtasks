@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <label>Number of days left for christmas</label>
+        <div id="res"></div>
+    </body>
+    <script>
+        const d= new Date();
+        const chri=new Date(d.getFullYear(),11,25);
+        if(d.getMonth()===11 && d.getDate()>25){
+            chri.setFullYear(d.getFullYear()+1);
+        }
+        const diff=chri.getTime()-d.getTime();
+        const days=Math.ceil(diff/(1000*60*60*24));
+        const resdiv=document.getElementById("res");
+        resdiv.textContent=+days;
+    </script>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+  
+    </head>
+
+    <body>
+        <div class="cont">
+            <label for="year">Sunadays on 1st january between 2014 and 2050</label>
+           <div id="res"></div>
+        
+        </div>
+        <script>
+    
+            const yeari=document.getElementById("year");
+            
+            const arr=[];
+            for(let i=2014 ;i<=2050;i++){
+            const d=new Date(i,0,1);
+            const day=d.getDay();
+            if(day==0){
+              arr.push(i);
+            }
+           
+            }
+            const resdiv=document.getElementById("res");
+            resdiv.textContent=arr.join(", ");
+        
+       </script>
+    </body>
+</html>

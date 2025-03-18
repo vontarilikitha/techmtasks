@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<body>
+    <div>
+        <label for="num">Enter your number</label>
+        <input id="num" type="number">
+        <button onclick="check()">Submit</button>
+        <div id="res"></div>
+
+    </div>
+    <script>
+
+        function check(){
+            var x=Math.floor(Math.random()*10)+1;
+            const inputi=document.getElementById("num");
+            const inp=inputi.value;
+            const resdiv=document.getElementById("res");
+            if(inp===x){
+                resdiv.textContent="GOOD WORK"
+            }
+            else{
+                resdiv.textContent="NOT MATCHED"            }
+
+        }
+    </script>
+</body>

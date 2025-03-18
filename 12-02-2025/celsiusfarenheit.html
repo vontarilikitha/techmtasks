@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<body>
+    <label for="temp">Enter temperature (e.g., 60C or 45F) </label>
+    <input id="temp">
+    <button onclick=change()>Submit </button>
+    <script>
+        function change(){
+        const tempi = document.getElementById("temp");
+        const inp = tempi.value;
+        const regex = /^([-+]?\d+(\.\d*)?)([CF])$/;
+        const match = inp.match(regex);
+        if (match) {
+            const temp = match[1];
+            const unit = match[3].toUpperCase();
+            if (unit === 'C') {
+                const fahrenheit = celsiusToFahrenheit(temp);
+                console.log(`${temp}°C is ${fahrenheit}°F`);
+            } else if (unit === 'F') {
+                const celsius = fahrenheitToCelsius(temp);
+                console.log(`${temp}°F is ${celsius}°C`);
+            } else {
+                console.log("Invalid unit. Please use C or F.");
+            }
+        } else {
+            console.log("Invalid input format. Please enter a number followed by C or F (e.g., 60C or 45F).");
+        }
+    }
+        function celsiusToFahrenheit(celsius) {
+            return (celsius * 9 / 5) + 32;
+        }
+
+        function fahrenheitToCelsius(fahrenheit) {
+            return (fahrenheit - 32) * 5 / 9;
+        }
+    </script>
+</body>

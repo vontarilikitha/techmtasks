@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <label for="n1">Enter your first number</label>
+            <input id="n1" type="number">
+            <label for="n2">Enter your first number</label>
+            <input id="n2" type="number">
+            <button onclick=compare()>compare</button>
+            <div id="res"></div>
+    </body>
+    <script>
+          function compare(){
+            const num1=document.getElementById("n1");
+            const num2=document.getElementById("n2");
+            const n1=num1.value;
+            const n2=num2.value;
+            const resdiv=document.getElementById("res");
+            if(n1>n2){
+                resdiv.textContent=n1+" "+"is greater";
+            }
+            else{
+                resdiv.textContent=n2+" "+"is greater";
+            }
+          }
+    </script>
+</html>
