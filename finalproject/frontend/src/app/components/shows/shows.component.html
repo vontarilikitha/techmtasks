@@ -1,0 +1,58 @@
+<div class="shows-container">
+  <header class="header">
+    <h1>Available Shows</h1>
+    <div class="header-right">
+      <div class="search-bar">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search shows..." class="search-input">
+      </div>
+      <a [routerLink]="['/my-bookings']" class="btn btn-primary">My Bookings</a>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="filters-section">
+    <div class="filter-group">
+      <label>Category:</label>
+      <select [(ngModel)]="selectedCategory">
+        <option value="">All Categories</option>
+        <option value="SPORTS">Sports</option>
+        <option value="THEATRE">Theatre</option>
+        <option value="CONCERT">Concert</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Date:</label>
+      <input type="date" [(ngModel)]="selectedDate">
+    </div>
+
+    <div class="filter-group">
+      <label>Venue:</label>
+      <select [(ngModel)]="selectedVenue">
+        <option value="">All Venues</option>
+        <option *ngFor="let venue of venues" [value]="venue">{{venue}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="shows-grid">
+    <div *ngFor="let show of filteredShows" class="show-card">
+      <div class="show-image">
+        <img [src]="getCategoryImage(show.category)" [alt]="show.category">
+      </div>
+      <div class="show-content">
+        <h2>{{ show.name }}</h2>
+        <p class="description">{{ show.description }}</p>
+        <p class="venue">📍 {{ show.venue }}</p>
+        <p class="datetime">🗓 {{ show.eventDateTime | date:'medium' }}</p>
+        <p class="price">💰 {{ show.price | currency }}</p>
+        <p class="seats">🪑 Available Seats: {{ show.availableSeats }}</p>
+        <a class="book-btn" [routerLink]="['/book-tickets', show.id]">Book Now</a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filteredShows.length === 0" class="no-shows">
+    <p>No shows found matching your criteria.</p>
+  </div>
+</div>

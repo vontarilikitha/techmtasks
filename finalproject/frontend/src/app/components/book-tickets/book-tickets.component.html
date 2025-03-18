@@ -1,0 +1,119 @@
+<!-- Loading spinner -->
+<div *ngIf="loading" class="loading-spinner">
+  <div class="spinner"></div>
+  <p>Loading...</p>
+</div>
+
+<!-- Error message -->
+<div *ngIf="error" class="error-message">
+  {{ error }}
+</div>
+
+<!-- Main content -->
+<div *ngIf="show" class="booking-container">
+  <!-- Show details section -->
+  <div class="show-details">
+    <h2>{{ show?.name }}</h2>
+    <p>{{ show?.description }}</p>
+    <p>Venue: {{ show?.venue }}</p>
+    <p>Date: {{ show?.eventDateTime | date }}</p>
+  </div>
+
+  <!-- Concert and Sports Booking Flow -->
+  <div *ngIf="show?.category === 'CONCERT' || show?.category === 'SPORTS'" class="booking-flow">
+    <!-- Step 1: Ticket Type -->
+    <div class="ticket-types">
+      <h3>Step 1: Select Ticket Type</h3>
+      <div class="ticket-options">
+        <div class="ticket-option" [class.selected]="selectedTicketType === 'VIP'" (click)="selectTicketType('VIP')">
+          <h4>VIP</h4>
+          <p>{{ show?.vipPrice | currency }}</p>
+          <p>Premium seating with exclusive benefits</p>
+        </div>
+        <div class="ticket-option" [class.selected]="selectedTicketType === 'PREMIUM'" (click)="selectTicketType('PREMIUM')">
+          <h4>Premium</h4>
+          <p>{{ show?.premiumPrice | currency }}</p>
+          <p>Enhanced experience with better views</p>
+        </div>
+        <div class="ticket-option" [class.selected]="selectedTicketType === 'GENERAL'" (click)="selectTicketType('GENERAL')">
+          <h4>General</h4>
+          <p>{{ show?.generalPrice | currency }}</p>
+          <p>Standard admission</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Quantity -->
+    <div class="ticket-quantity">
+      <h3>Step 2: Select Number of Tickets</h3>
+      <div class="quantity-selector">
+        <button (click)="ticketCount = ticketCount > 1 ? ticketCount - 1 : 1">-</button>
+        <span>{{ ticketCount }}</span>
+        <button (click)="ticketCount = ticketCount < 10 ? ticketCount + 1 : 10">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Movie and Theatre Booking Flow -->
+  <div *ngIf="show?.category === 'MOVIE' || show?.category === 'THEATRE'" class="booking-flow">
+    <!-- Step 1: Show Time -->
+    <div class="show-times">
+      <h3>Step 1: Select Show Time</h3>
+      <div class="time-slots-container">
+        <div *ngFor="let timeType of timeTypes" class="time-slot-group">
+          <h4>{{ timeType | titlecase }}</h4>
+          <div class="time-buttons">
+            <button 
+              *ngFor="let time of showTimesByType[timeType]"
+              [class.selected]="selectedTime === time"
+              (click)="selectShowTime(time)"
+              class="time-btn">
+              {{ time }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Seat Selection (only shown after selecting time) -->
+    <div *ngIf="selectedTime" class="seat-selection">
+      <h3>Step 2: Select Seats</h3>
+      <app-seating-chart
+        [totalSeats]="show?.totalSeats || 0"
+        [availableSeats]="show?.availableSeats || 0"
+        [eventName]="show?.name || ''"
+        [venue]="show?.venue || ''"
+        [price]="getTicketPrice()"
+        (seatSelected)="onSeatsSelected($event)">
+      </app-seating-chart>
+    </div>
+  </div>
+
+  <!-- Booking Summary -->
+  <div *ngIf="canShowBookingSummary()" class="booking-summary">
+    <h3>Booking Summary</h3>
+    <div class="summary-content">
+      <p><strong>Event:</strong> {{ show?.name }}</p>
+      <p><strong>Venue:</strong> {{ show?.venue }}</p>
+      <p><strong>Date:</strong> {{ show?.eventDateTime | date }}</p>
+      
+      <ng-container *ngIf="show?.category === 'CONCERT' || show?.category === 'SPORTS'">
+        <p><strong>Ticket Type:</strong> {{ selectedTicketType }}</p>
+        <p><strong>Number of Tickets:</strong> {{ ticketCount }}</p>
+        <p><strong>Price per Ticket:</strong> {{ getTicketPrice() | currency }}</p>
+      </ng-container>
+      
+      <ng-container *ngIf="show?.category === 'MOVIE' || show?.category === 'THEATRE'">
+        <p><strong>Show Time:</strong> {{ selectedTime }}</p>
+        <p><strong>Selected Seats:</strong> {{ getSelectedSeatsDisplay() }}</p>
+        <p><strong>Price per Ticket:</strong> {{ show?.price | currency }}</p>
+      </ng-container>
+      
+      <p class="total-price"><strong>Total Amount:</strong> {{ getTotalPrice() | currency }}</p>
+      
+      <button class="book-btn" (click)="bookTickets()" [disabled]="loading">
+        {{ loading ? 'Processing...' : 'Confirm Booking' }}
+      </button>
+    </div>
+  </div>
+</div>

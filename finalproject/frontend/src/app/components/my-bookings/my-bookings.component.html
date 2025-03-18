@@ -1,0 +1,37 @@
+<div class="bookings-container">
+  <h2>My Bookings</h2>
+  <div class="bookings-list" *ngIf="bookings && bookings.length > 0">
+    <div class="booking-card" *ngFor="let booking of bookings">
+      <h3>{{ booking?.event?.name || 'Event ' + booking?.eventId }}</h3>
+      <p>Number of Tickets: {{ booking?.numberOfTickets }}</p>
+      <p>Total Price: ${{ booking?.totalPrice }}</p>
+      <p>Status: {{ booking?.status }}</p>
+      <p *ngIf="booking?.showTime">Show Time: {{ booking?.showTime }}</p>
+      
+      <div class="booking-actions">
+        <button class="action-btn cancel" 
+                (click)="cancelBooking(booking?.id)"
+                *ngIf="booking?.status !== 'CANCELLED'">
+          Cancel Booking
+        </button>
+        
+        <button class="action-btn payment" 
+                (click)="confirmPayment(booking?.id)"
+                *ngIf="booking?.status === 'PENDING'">
+          Confirm Payment
+        </button>
+        
+        <select *ngIf="booking?.status !== 'CANCELLED'"
+                #statusSelect
+                (change)="onStatusChange(statusSelect.value, booking?.id)"
+                class="status-select">
+          <option value="">Update Status</option>
+          <option value="PENDING">Pending</option>
+          <option value="CONFIRMED">Confirmed</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <p *ngIf="!bookings || bookings.length === 0">No bookings found.</p>
+</div>

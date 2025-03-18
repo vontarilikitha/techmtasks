@@ -1,0 +1,88 @@
+<div class="admin-container">
+  <header class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <button class="btn btn-secondary" (click)="logout()">Logout</button>
+  </header>
+  
+  <div class="dashboard-content">
+    <div class="events-table">
+      <h2>Events Management</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Event Name</th>
+            <th>Type</th>
+            <th>Venue</th>
+            <th>Date & Time</th>
+            <th>Total Seats</th>
+            <th>Available Seats</th>
+            <th>Price</th>
+            <th>Bookings</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let event of events">
+            <td>{{ event.name }}</td>
+            <td>{{ event.category }}</td>
+            <td>{{ event.venue }}</td>
+            <td>{{ event.eventDateTime | date:'medium' }}</td>
+            <td>{{ event.totalSeats }}</td>
+            <td>{{ event.availableSeats }}</td>
+            <td>{{ event.price | currency }}</td>
+            <td>{{ event.bookings.length || 0 }}</td>
+            <td>
+              <button class="btn btn-info" (click)="viewAnalytics(event)">Analytics</button>
+              <button class="btn btn-danger" (click)="removeEvent(event.id)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div class="modal" *ngIf="showAnalytics && selectedEvent">
+      <div class="modal-content">
+        <h2>Analytics for {{ selectedEvent.name }}</h2>
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <h3>Total Revenue</h3>
+            <p>{{ selectedEvent.analytics?.totalRevenue | currency }}</p>
+          </div>
+          <div class="analytics-card">
+            <h3>Occupancy Rate</h3>
+            <p>{{ selectedEvent.analytics?.occupancyRate | number:'1.0-2' }}%</p>
+          </div>
+          <div class="analytics-card">
+            <h3>Total Tickets Sold</h3>
+            <p>{{ selectedEvent.bookings.length || 0 }}</p>
+          </div>
+        </div>
+
+        <div class="sales-breakdown" *ngIf="selectedEvent.analytics?.salesByShowTime">
+          <h3>Sales by Show Time</h3>
+          <div class="sales-grid">
+            <div class="sales-item" *ngFor="let sale of selectedEvent.analytics?.salesByShowTime | keyvalue">
+              <strong>{{ sale.key }}</strong>
+              <span>{{ sale.value }} tickets</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" (click)="closeAnalytics()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ticket Booking Section -->
+<div class="ticket-booking" *ngIf="selectedEvent">
+  <h3>Book Tickets</h3>
+  <div class="ticket-selection">
+    <label for="ticketCount">Select number of tickets (max 6):</label>
+    <select id="ticketCount" [(ngModel)]="ticketCount">
+      <option *ngFor="let count of ticketOptions" [value]="count">{{ count }}</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" (click)="bookTickets()">Book Tickets</button>
+</div>
